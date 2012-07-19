@@ -15,7 +15,7 @@ This extension uses [Google Closure compiler](https://developers.google.com/clos
 
 By default, the extension will look for these packages installed in `protected/vendor/googleclosure` and `protected/vendor/lessphp`, respectively. Simply extract compiler-latest.zip into protected/vendor/googleclosure and lessphp-0.3.5.tar.gz into protected/vendor/lessphp.
 
-If you put these packages in another locaiton, you must manny set the googleClosure* and/or plessc* configuration options to their respective locations (see Configuration Options below ffor details).
+If you put these packages in another locaiton, you must manually set the googleClosure* and/or plessc* configuration options to their respective locations (see Configuration Options below ffor details).
 
 
 Installation
