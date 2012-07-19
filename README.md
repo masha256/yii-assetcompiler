@@ -3,7 +3,7 @@ yii-assetcompiler
 Yii extension for js/less asset compilation and management
 
 
-This extension uses the [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/) to compile your assets into combined/optimized versions. The extension can do this compilation on the fly (using the autoCompile/forceCompile configuration parameters) but is designed to be ran at deployment time using a yii console command.
+This extension uses the [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/) to compile your assets into combined/optimized versions. The extension can do this compilation on the fly (using the autoCompile/forceCompile configuration parameters) but is designed to be compiled at deployment time using a yii console command. Views and layouts then make reference to the asset groups to bring in either the compiled asset (production mode) or the raw asset components (in developer mode).
 
 The lessphp compiler was chosen because it is compatible with the [Bootstrap](http://twitter.github.com/bootstrap/) framework.
 
@@ -16,6 +16,15 @@ This extension replies on [Google Closure compiler](https://developers.google.co
 By default, the extension will look for these packages installed in `protected/vendor/googleclosure` and `protected/vendor/lessphp`, respectively.
 
 If you put these packages in another locaiton, you must manny set the googleClosure* and/or plessc* configuration options to their respective locations (see Configuration Options below ffor details).
+
+
+Installation
+------------
+
+Copy the `extensions` directory to your <yii_app>/protected/extensions directory and the contents of `commands` to your <yii_app>/protected/commands directory.
+
+Edit your main.php configuration file using the Configuration Options/Configuration Example below.
+
 
 Modes
 -----
