@@ -5,13 +5,13 @@ Yii extension for js/less asset compilation and management
 
 This extension uses the [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/) to compile your assets into combined/optimized versions. The extension can do this compilation on the fly (using the autoCompile/forceCompile configuration parameters) but is designed to be compiled at deployment time using a yii console command. Views and layouts then make reference to the asset groups to bring in either the compiled asset (production mode) or the raw asset components (in developer mode).
 
-The lessphp compiler was chosen because it is compatible with the [Bootstrap](http://twitter.github.com/bootstrap/) framework.
+The lessphp compiler was chosen because it is compatible with the [Bootstrap](http://twitter.github.com/bootstrap/) framework's usage of LESS.
 
 
 Dependencies
 ------------
 
-This extension replies on [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/). Version 0.3.5 or later is required due to its support for compressed css mode.
+This extension uses on [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/). For lessphp, version 0.3.5 or later is required due to its support for compressed css mode.
 
 By default, the extension will look for these packages installed in `protected/vendor/googleclosure` and `protected/vendor/lessphp`, respectively. Simply extract compiler-latest.zip into protected/vendor/googleclosure and lessphp-0.3.5.tar.gz into protected/vendor/lessphp.
 
