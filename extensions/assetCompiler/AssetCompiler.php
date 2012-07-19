@@ -73,7 +73,7 @@ class AssetCompiler extends CApplicationComponent
             $this->plesscPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../vendor/lessphp/plessc';
 
         if (!isset($this->plesscFormat))
-            $this->plesscFormat = 'default';
+            $this->plesscFormat = 'compressed';
 
         if ($this->forceCompile)
             $this->compileAll();
