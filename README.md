@@ -29,7 +29,11 @@ Edit your main.php configuration file using the Configuration Options/Configurat
 Modes
 -----
 
-This extension supports developer mode whereby it renders the HTML to serve up the individual uncompiled files and uses less.js to serve the raw less files as well as a production mode where it serves the compiled/compressed files.
+This extension supports developer mode whereby it renders the HTML to serve up the individual uncompiled files and uses less.js to serve the raw less files as well as a production mode where it serves the compiled/compressed files. By default this extension uses the YII_DEBUG define to know if it is in production mode or developer mode. If you run YII_DEBUG=true in production (you shouldn't be!), you can explicitly set the debugMode => false option. 
+
+When in developer/debug mode, the extension will register the raw javascript components of the group (group types of 'js') and the raw .less files using the appropriate <link> tag and also register the less.js script. 
+
+In production mode (debugMode=>false), the compiled versions of the group are registered with the page.
 
 
 Configuration Options
