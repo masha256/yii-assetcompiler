@@ -11,7 +11,7 @@ The lessphp compiler was chosen because it is compatible with the [Bootstrap](ht
 Dependencies
 ------------
 
-This extension uses on [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/). For lessphp, version 0.3.5 or later is required due to its support for compressed css mode.
+This extension uses [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/). For lessphp, version 0.3.5 or later is required due to its support for compressed css mode.
 
 By default, the extension will look for these packages installed in `protected/vendor/googleclosure` and `protected/vendor/lessphp`, respectively. Simply extract compiler-latest.zip into protected/vendor/googleclosure and lessphp-0.3.5.tar.gz into protected/vendor/lessphp.
 
