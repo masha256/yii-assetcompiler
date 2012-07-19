@@ -1,8 +1,7 @@
 yii-assetcompiler
 =================
-
 Yii extension for js/less asset compilation and management
-----------------------------------------------------------
+
 
 This extension uses the [Google Closure compiler](https://developers.google.com/closure/compiler/) and [lessphp](http://leafo.net/lessphp/) to compile your assets into combined/optimized versions. The extension can do this compilation on the fly (using the autoCompile/forceCompile configuration parameters) but is designed to be ran at deployment time using a yii console command.
 
@@ -29,21 +28,21 @@ Configuration Options
 
 The following configuration options can be passed as an element in the 'assetCompiler' array to control behavior, override defaults and set paths. Defaults for the option are listed in [] next to the option name.
 
-* groups [] - This is the heart of the extension, defining what different groups of files you want to combine. More detail in the Groups section below.
-* basePath [root of application] - Path to application on filesystem.
-* baseUrl [webroot detected by Yii] - URL of application.
-* debugMode [YII_DEBUG] - (true/false) Enable debug/developer mode or not, defaults to using YII_DEBUG define.
-* autoCompile [false] - (true/false) Automatically check the timestamp of the output file and if it is older than any of the component file(s), automatically recompile the group. For autoCompile to be affective, you should preload the assetCompiler component in the Yii 'preload' section.
-* forceCompile [false] - (true/false) Recompile the group when it is used everytime to matter the timestamps - useful for debugging or dev mode.
-* lessJsUrl [../js/less.min.js] - URL to the less javascript file, used when in debug mode and rendering a less file. Note: version 1.3.0 or greater is required to support bootstrap.
-* jsRenderPosition [CClientScript::POS_HEAD] - Location to render javascript tags - passed on to clientScript->registerScriptFile() calls.
-* jsCompiler [googleclosure] - Which javascript compiler to use - currently only 'googleclosure' is supported. Others may be supported in the future.
-* googleClosureJavaPath [java] - Path to java program to run google closure compiler.jar. 
-* googleClosureJarFile [approot/vendor/googleclosure/compiler.jar] - Path to google closure compiler.jar file.
-* googleClosureCompilationLevel [WHITESPACE_ONLY] - Google closure compilation level, passed directly to java command. Options are WHITESPACE_ONLY, SIMPLE_OPTIMIZATIONS and ADVANCED_OPTIMIZATIONS. Read the google closure documentation for more detail.
-* lessCompiler [plessc] - Which less compiler to use - currently only 'plessc' is supported. Others may be supported in the future.
-* plesscPath [approot/vendor/lessphp/plessc] - Path to plessc command from the lessphp package.
-* plesscFormat [compressed] - Which output format for plessc, passed directly to plessc command. Options are 'default' and 'compressed'.
+* `groups` *[]* - This is the heart of the extension, defining what different groups of files you want to combine. More detail in the Groups section below.
+* `basePath` *[root of application]* - Path to application on filesystem.
+* `baseUrl` *[webroot detected by Yii]* - URL of application.
+* `debugMode` *[YII_DEBUG]* - (true/false) Enable debug/developer mode or not, defaults to using YII_DEBUG define.
+* `autoCompile` *[false]* - (true/false) Automatically check the timestamp of the output file and if it is older than any of the component file(s), automatically recompile the group. For autoCompile to be affective, you should preload the assetCompiler component in the Yii 'preload' section.
+* `forceCompile` *[false]* - (true/false) Recompile the group when it is used everytime to matter the timestamps - useful for debugging or dev mode.
+* `lessJsUrl` *[../js/less.min.js]* - URL to the less javascript file, used when in debug mode and rendering a less file. Note: version 1.3.0 or greater is required to support bootstrap.
+* `jsRenderPosition` *[CClientScript::POS_HEAD]* - Location to render javascript tags - passed on to clientScript->registerScriptFile() calls.
+* `jsCompiler` *[googleclosure]* - Which javascript compiler to use - currently only 'googleclosure' is supported. Others may be supported in the future.
+* `googleClosureJavaPath` *[java]* - Path to java program to run google closure compiler.jar. 
+* `googleClosureJarFile` *[approot/vendor/googleclosure/compiler.jar]* - Path to google closure compiler.jar file.
+* `googleClosureCompilationLevel` *[WHITESPACE_ONLY]* - Google closure compilation level, passed directly to java command. Options are WHITESPACE_ONLY, SIMPLE_OPTIMIZATIONS and ADVANCED_OPTIMIZATIONS. Read the google closure documentation for more detail.
+* `lessCompiler` *[plessc]* - Which less compiler to use - currently only 'plessc' is supported. Others may be supported in the future.
+* `plesscPath` *[approot/vendor/lessphp/plessc]* - Path to plessc command from the lessphp package.
+* `plesscFormat` *[compressed]* - Which output format for plessc, passed directly to plessc command. Options are 'default' and 'compressed'.
 
 
 Groups
