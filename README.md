@@ -39,7 +39,7 @@ In production mode (debugMode=>false), the compiled versions of the group are re
 Configuration Options
 ---------------------
 
-The following configuration options can be passed as an element in the 'assetCompiler' array to control behavior, override defaults and set paths. Defaults for the option are listed in [] next to the option name.
+All but the groups option have sensible defaults that you will likely not need to change anything, but in case you need to adapt to your environment, the following configuration options can be passed as an element in the 'assetCompiler' array to control behavior, override defaults and set paths. Defaults for the option are listed in [] next to the option name.
 
 * `groups` *[]* - This is the heart of the extension, defining what different groups of files you want to combine. More detail in the Groups section below.
 * `basePath` *[root of application]* - Path to application on filesystem.
@@ -51,10 +51,10 @@ The following configuration options can be passed as an element in the 'assetCom
 * `jsRenderPosition` *[CClientScript::POS_HEAD]* - Location to render javascript tags - passed on to clientScript->registerScriptFile() calls.
 * `jsCompiler` *[googleclosure]* - Which javascript compiler to use - currently only 'googleclosure' is supported. Others may be supported in the future.
 * `googleClosureJavaPath` *[java]* - Path to java program to run google closure compiler.jar. 
-* `googleClosureJarFile` *[approot/vendor/googleclosure/compiler.jar]* - Path to google closure compiler.jar file.
+* `googleClosureJarFile` *[approot/protected/vendor/googleclosure/compiler.jar]* - Path to google closure compiler.jar file.
 * `googleClosureCompilationLevel` *[WHITESPACE_ONLY]* - Google closure compilation level, passed directly to java command. Options are WHITESPACE_ONLY, SIMPLE_OPTIMIZATIONS and ADVANCED_OPTIMIZATIONS. Read the google closure documentation for more detail.
 * `lessCompiler` *[plessc]* - Which less compiler to use - currently only 'plessc' is supported. Others may be supported in the future.
-* `plesscPath` *[approot/vendor/lessphp/plessc]* - Path to plessc command from the lessphp package.
+* `plesscPath` *[approot/protected/vendor/lessphp/plessc]* - Path to plessc command from the lessphp package.
 * `plesscFormat` *[compressed]* - Which output format for plessc, passed directly to plessc command. Options are 'default' and 'compressed'.
 
 
