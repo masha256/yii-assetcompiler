@@ -9,18 +9,20 @@
  */
 class AssetCompiler extends CApplicationComponent
 {
-
     public $basePath;
 
     public $baseUrl;
 
     public $debugMode = YII_DEBUG;
 
+    public $assetsVersion = '1';
+
     public $groups;
 
     public $autoCompile = false;
     public $forceCompile = false;
 
+    public $javaPath;
 
     public $lessJsUrl;
 
@@ -28,16 +30,17 @@ class AssetCompiler extends CApplicationComponent
 
     public $jsCompiler = 'googleclosure';
 
-    public $googleClosureJavaPath;
     public $googleClosureJarFile;
     public $googleClosureCompilationLevel;
+
+    public $cssCompiler = 'yuicompressor';
+
+    public $yuiCompressorJarFile;
 
     public $lessCompiler = 'plessc';
 
     public $plesscPath;
     public $plesscFormat;
-
-
 
     /**
      * Initializes the component.
@@ -60,8 +63,11 @@ class AssetCompiler extends CApplicationComponent
         if (!isset($this->lessJsUrl))
             $this->lessJsUrl = '../js/less.min.js';
 
-        if (!isset($this->googleClosureJavaPath))
-            $this->googleClosureJavaPath = 'java';
+        if (!isset($this->javaPath))
+            $this->javaPath = '/usr/bin/java';
+
+        if (!isset($this->yuiCompressorJarFile))
+            $this->yuiCompressorJarFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../vendor/yuicompressor/yuicompressor.jar';
 
         if (!isset($this->googleClosureJarFile))
             $this->googleClosureJarFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../vendor/googleclosure/compiler.jar';
@@ -81,17 +87,14 @@ class AssetCompiler extends CApplicationComponent
             $this->compileNeedsUpdate();
     }
 
-
-    private function checkGroupExists($group)
+    protected function checkGroupExists($group)
     {
         if (!isset($this->groups[$group]))
             throw new CException(__CLASS__.': Failed to find group ' . $group . ' in configuration!');
     }
 
-
     public function registerAssetGroup($group)
     {
-
         if (is_array($group))
         {
             foreach ($group as $g)
@@ -108,14 +111,13 @@ class AssetCompiler extends CApplicationComponent
         }
     }
 
-
     public function registerAssetGroupRaw($group)
     {
         $this->checkGroupExists($group);
 
         $g = $this->groups[$group];
 
-        if ($g['type'] == 'js')
+        if ($g['type'] == 'js' || $g['type'] == 'css')
         {
             foreach ($g['files'] as $f)
             {
@@ -139,7 +141,7 @@ class AssetCompiler extends CApplicationComponent
         if ($type == 'less')
             $type = 'css'; // less files become css after compilation
 
-        $this->registerFile($g['output'], $type);
+        $this->registerFile($g['output'].'?v'.(string)$this->assetsVersion, $type);
     }
 
     public function registerFile($file, $type)
@@ -163,14 +165,14 @@ class AssetCompiler extends CApplicationComponent
         }
     }
 
-
     public function compileNeedsUpdate()
     {
-
         foreach ($this->groups as $group=>$g)
         {
             if ($g['type'] == 'js' && $this->needsUpdateJsGroup($group))
                 $this->compileJsGroup($group);
+            elseif ($g['type'] == 'css' && $this->needsUpdateCssGroup($group))
+                $this->compileCssGroup($group);
             elseif ($g['type'] == 'less' && $this->needsUpdateLessGroup($group))
                 $this->compileLessGroup($group);
         }
@@ -184,6 +186,8 @@ class AssetCompiler extends CApplicationComponent
 
         if ($g['type'] == 'js')
             $this->compileJsGroup($group);
+        elseif ($g['type'] == 'css')
+            $this->compileCssGroup($group);
         elseif ($g['type'] == 'less')
             $this->compileLessGroup($group);
         else
@@ -194,6 +198,7 @@ class AssetCompiler extends CApplicationComponent
     {
         $this->compileAllJsGroups();
         $this->compileAllLessGroups();
+        $this->compileAllCssGroups();
     }
 
     public function compileAllJsGroups()
@@ -203,6 +208,13 @@ class AssetCompiler extends CApplicationComponent
                 $this->compileJsGroup($group);
     }
 
+    public function compileAllCssGroups()
+    {
+        foreach ($this->groups as $group=>$g)
+            if ($g['type'] == 'css')
+                $this->compileCssGroup($group);
+    }
+
     public function compileAllLessGroups()
     {
         foreach ($this->groups as $group=>$g)
@@ -210,8 +222,7 @@ class AssetCompiler extends CApplicationComponent
                 $this->compileLessGroup($group);
     }
 
-
-    private function needsUpdateJsGroup($group)
+    protected function needsUpdateJsGroup($group)
     {
         $g = $this->groups[$group];
 
@@ -230,17 +241,16 @@ class AssetCompiler extends CApplicationComponent
 
     public function compileJsGroup($group)
     {
-
         if ($this->jsCompiler == 'googleclosure')
             $this->compileJsGroupGoogleClosure($group);
         else
             throw new CException(__CLASS__.': Unknown jsCompiler ' . $this->jsCompiler);
     }
 
-    private function compileJsGroupGoogleClosure($group)
+    protected function compileJsGroupGoogleClosure($group)
     {
         $g = $this->groups[$group];
-        $cmd = $this->googleClosureJavaPath.' -jar '.$this->googleClosureJarFile;
+        $cmd = $this->javaPath.' -jar '.$this->googleClosureJarFile;
         foreach ($g['files'] as $file)
             $cmd .= ' --js '.$this->basePath.DIRECTORY_SEPARATOR.$file;
         $cmd .= ' --js_output_file '.$this->basePath.DIRECTORY_SEPARATOR.$g['output'];
@@ -249,7 +259,61 @@ class AssetCompiler extends CApplicationComponent
         exec($cmd);
     }
 
-    private function needsUpdateLessGroup($group)
+    protected function needsUpdateCssGroup($group)
+    {
+        $g = $this->groups[$group];
+
+        $needsUpdate = false;
+
+        $outputTs = $this->getLastModified($this->basePath.DIRECTORY_SEPARATOR.$g['output']);
+        foreach ($g['files'] as $f)
+        {
+            $fileTs = $this->getLastModified($this->basePath.DIRECTORY_SEPARATOR.$f);
+            if ($outputTs < $fileTs)
+                $needsUpdate = true;
+        }
+
+        return $needsUpdate;
+    }
+
+    public function compileCssGroup($group)
+    {
+        if ($this->cssCompiler == 'yuicompressor')
+            $this->compileCssGroupYuiCompressor($group);
+        else
+            throw new CException(__CLASS__.': Unknown cssCompiler ' . $this->cssCompiler);
+    }
+
+    protected function compileCssGroupYuiCompressor($group)
+    {
+        $joinedContent = '';
+
+        $g = $this->groups[$group];
+        foreach ($g['files'] as $file) {
+            $content = file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$file);
+            $joinedContent .= $content;
+        }
+
+        $inFile = Yii::app()->getRuntimePath().DIRECTORY_SEPARATOR.$group;
+        $outFile = $this->basePath.DIRECTORY_SEPARATOR.$g['output'];
+
+        file_put_contents($inFile, $joinedContent);
+        unset($joinedContent);
+
+        $cmd = sprintf(
+            "%s -jar %s --type %s -o %s %s",
+            escapeshellarg($this->javaPath),
+            escapeshellarg($this->yuiCompressorJarFile),
+            'css',
+            escapeshellarg($outFile),
+            escapeshellarg($inFile)
+        );
+
+        //echo "SYSTEM CMD: " . $cmd . "\n";
+        exec($cmd);
+    }
+
+    protected function needsUpdateLessGroup($group)
     {
         $g = $this->groups[$group];
 
@@ -264,7 +328,6 @@ class AssetCompiler extends CApplicationComponent
         return $needsUpdate;
     }
 
-
     public function compileLessGroup($group)
     {
         if ($this->lessCompiler == 'plessc')
@@ -273,7 +336,7 @@ class AssetCompiler extends CApplicationComponent
             throw new CException(__CLASS__.': Unknown cssCompiler ' . $this->lessCompiler);
     }
 
-    private function compileLessGroupPlessc($group)
+    protected function compileLessGroupPlessc($group)
     {
         $g = $this->groups[$group];
 
@@ -283,7 +346,6 @@ class AssetCompiler extends CApplicationComponent
         //echo "SYSTEM CMD: " . $cmd . "\n";
         exec($cmd);
     }
-
 
     /**
      * Returns the last modified for a specific path.
@@ -330,5 +392,4 @@ class AssetCompiler extends CApplicationComponent
             }
         }
     }
-
 }

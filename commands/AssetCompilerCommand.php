@@ -21,6 +21,12 @@ class AssetCompilerCommand extends CConsoleCommand
         Yii::app()->assetCompiler->compileAllJsGroups();
     }
 
+    public function actionCss()
+    {
+        echo "Compiling css assets\n";
+        Yii::app()->assetCompiler->compileAllCssGroups();
+    }
+
     public function actionLess()
     {
         echo "Compiling less assets\n";
