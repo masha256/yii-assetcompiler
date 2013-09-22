@@ -100,6 +100,11 @@ The following would go into your Yii 'components' array:
                             'js/bootstrap-button.js','js/bootstrap-popover.js','js/bootstrap-dropdown.js'),
                         'output' => 'js/bootstrap-min.js',
                     ),
+                    'siteCss' => array(
+                        'type' => 'css',
+                        'files' => array('css/style.css','css/style1.css','css/style2.css'),
+                        'output' => 'css/style-min.css',
+                    ),
                     'siteLess' => array(
                         'type' => 'less',
                         'file' => 'css/bootstrap/myapp.less',
@@ -141,6 +146,8 @@ You can also choose to compile a specifc group by:
 or just specific types of asset groups
 ```
 ./yiic assetcompiler js
+#or
+./yiic assetcompiler css
 #or
 ./yiic assetcompiler less
 ```
